@@ -1,0 +1,74 @@
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Электронная библиотека</title>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'pages:homepage' %}">Электронная библиотека</a>
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'pages:homepage' %}">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'library:list' %}">Список книг</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'library:my_books' %}">Мои книги</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'library:profile' %}">Мой профиль</a>
+                    </li>
+                    {% if user.is_authenticated and user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'library:debtors' %}">Список должников</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'library:book_add' %}">Добавить книгу</a>
+                        </li>
+                    {% endif %}
+                    </ul>
+                    <ul class="navbar-nav ms-auto">
+                        {% if user.is_authenticated %}
+                            <span class="navbar-text">Пользователь: <b>{{ user.username }}</b></span>
+                            <li class="nav-item">
+                              <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                            </li>
+                          {% else %}
+                            <li class="nav-item">
+                              <a class="nav-link{% if view_name == 'users:login' %} active {% endif %}"
+                                 href="{% url 'login' %}">Войти</a>
+                            </li>
+                            <li class="nav-item">
+                              <a class="nav-link{% if view_name == 'login' %} active {% endif %}"
+                                 href="{% url 'users:registration' %}">Регистрация</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

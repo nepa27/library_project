@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Список должников</h2>
+    {% for user in debtors %}
+    <div class="card mb-3">
+        <div class="card-header">
+            <h4>{{ user.username }}</h4>
+        </div>
+        <div class="card-body">
+            {% if user.books_taken.all %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Название книги</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for status in user.books_taken.all %}
+                    <tr>
+                        <td>{{ status.book.title }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>У этого пользователя нет взятых книг.</p>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% include "includes/paginator.html" %}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Список книг</h2>
+        <form method="get" class="mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="q" placeholder="Поиск по названию или автору" value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-outline-secondary">Поиск</button>
+            </div>
+        </form>
+    <div class="row">
+        {% for book in book_list %}
+        <div class="col-md-4 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{% url 'library:book_detail' book.id %}">{{ book.title }}</a></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ book.author }}</h6>
+                    <p class="card-text">Год издания: {{ book.year }}</p>
+                    {% if request.user.is_superuser %}
+                        <a href="{% url 'library:book_delete' book.pk %}" class="btn btn-danger">Удалить</a>
+                    {% endif %}
+                    {% if book.is_taken %}
+                        {% if book.status.user == request.user %}
+                        <a href="{% url 'library:return_book' book.id %}" class="btn btn-warning">Вернуть книгу</a>
+                        {% else %}
+                        <button class="btn btn-secondary" disabled>Взята</button>
+                        {% endif %}
+                    {% else %}
+                    <a href="{% url 'library:take_book' book.id %}" class="btn btn-primary">Взять книгу</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>Книги не найдены.</p>
+        {% endfor %}
+    </div>
+</div>
+{% include "includes/paginator.html" %}
+{% endblock %}

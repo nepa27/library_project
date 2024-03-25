@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container mt-5">
+    <hr>
+    <h2>Мой профиль</h2>
+    <p>Имя: {{ request.user.username }}</p>
+    <p>Email: {{ request.user.email }}</p>
+    <a href="{% url 'users:user_edit' request.user.id %}"
+        class="btn btn-warning">Изменить данные</a>
+    <a href="/auth/password_change/"
+        class="btn btn-warning">Изменить пароль</a>
+    <hr>
+    <div>
+        <h4>Взятые книги:</h4>
+        {% for book_status in page_obj %}
+        <div class="d-flex justify-content-between align-items-center border p-3 mb-2">
+            <div>
+                <p><strong>Название:</strong> {{ book_status.book.title }}</p>
+                <p><strong>Автор:</strong> {{ book_status.book.author }}</p>
+                <p><strong>Год издания:</strong> {{ book_status.book.year_of_publication }}</p>
+            </div>
+            <div>
+                <a href="{% url 'library:return_book_with_next' book_status.book.id 'profile' %}"
+                   class="btn btn-warning">Сдать книгу</a>
+            </div>
+        </div>
+        {% empty %}
+        <p>Вы не взяли ни одной книги.</p>
+        {% endfor %}
+    </div>
+</div>
+{% include "includes/paginator.html" %}
+{% endblock %}

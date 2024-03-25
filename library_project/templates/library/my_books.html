@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Мои книги</h2>
+        <form method="get" class="mb-3">
+            <div class="input-group">
+                <input type="text" class="form-control" name="q" placeholder="Поиск по названию или автору" value="{{ request.GET.q }}">
+                <button type="submit" class="btn btn-outline-secondary">Поиск</button>
+            </div>
+        </form>
+    {% if my_books %}
+    <div class="row">
+        {% for status in my_books %}
+        <div class="col-md-4 mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ status.book.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ status.book.author }}</h6>
+                    <p class="card-text">Год издания: {{ status.book.year }}</p>
+                    <a href="{% url 'library:return_book_with_next' status.book.id 'my_books' %}" class="btn btn-warning">Вернуть книгу</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>К сожалению, у вас пока нет книг :(</p>
+    {% endif %}
+</div>
+{% include "includes/paginator.html" %}
+{% endblock %}

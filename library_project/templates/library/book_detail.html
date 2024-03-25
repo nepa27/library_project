@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{{ book.title }}</h2>
+    <p><strong>Автор:</strong> {{ book.author }}</p>
+    <p><strong>Год издания:</strong> {{ book.year }}</p>
+
+    {% if is_admin %}
+    <a href="{% url 'library:book_update' book.id %}" class="btn btn-primary">Редактировать книгу</a>
+    <h3>История передвижения:</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Номер</th>
+                <th>Имя пользователя</th>
+                <th>Что сделал</th>
+                <th>Когда</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movement in book_movements %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ movement.user.username }}</td>
+                <td>{{ movement.action }}</td>
+                <td>{{ movement.action_date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endblock %}
