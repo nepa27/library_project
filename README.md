@@ -45,4 +45,5 @@ python: can't open file 'library_project/manage.py'[Errno 2] No such file or dir
 ```
 убедитесь, что вы находитесь в корневой директории проекта
 
-### Стек технологий
+### Инструменты и стек
+#python #HTML #CSS #Django #Bootstrap #Pythonanywhere
